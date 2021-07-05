@@ -1,21 +1,21 @@
 import { createContext, useContext, useReducer } from 'react'
 import { productListReducer, initialState } from './reducer'
 
-const AuthStateContext = createContext()
-const AuthDispatchContext = createContext()
+const ProductStateContext = createContext()
+const DispatchContext = createContext()
 
 export const useProductState = () => {
-  const context = useContext(AuthStateContext)
+  const context = useContext(ProductStateContext)
   if (context === undefined) {
-    throw new Error('useProductState must be used within a AuthProvider')
+    throw new Error('useProductState must be used within a StoreProvider')
   }
   return context
 }
 
 export function useDispatch() {
-  const context = useContext(AuthDispatchContext)
+  const context = useContext(DispatchContext)
   if (context === undefined) {
-    throw new Error('useDispatch must be used within a AuthProvider')
+    throw new Error('useDispatch must be used within a StoreProvider')
   }
 
   return context
@@ -24,10 +24,10 @@ export function useDispatch() {
 export const StoreProvider = ({ children }) => {
   const [state, dispatch] = useReducer(productListReducer, initialState)
   return (
-    <AuthStateContext.Provider value={state}>
-      <AuthDispatchContext.Provider value={dispatch}>
+    <ProductStateContext.Provider value={state}>
+      <DispatchContext.Provider value={dispatch}>
         {children}
-      </AuthDispatchContext.Provider>
-    </AuthStateContext.Provider>
+      </DispatchContext.Provider>
+    </ProductStateContext.Provider>
   )
 }
