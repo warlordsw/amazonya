@@ -11,7 +11,6 @@ function CartScreen(props) {
   const qty = props.location.search
     ? Number(props.location.search.split('=')[1])
     : 1
-  console.log(qty)
   localStorage.setItem('cartItems', JSON.stringify(cartItems))
   useEffect(() => {
     if (productId) {
