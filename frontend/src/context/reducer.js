@@ -1,4 +1,8 @@
-import { CART_ADD_ITEM, CART_REMOVE_ITEM } from '../constants/cartConstants'
+import {
+  CART_ADD_ITEM,
+  CART_REMOVE_ITEM,
+  CART_SAVE_SHIPPING_ADDRESS,
+} from '../constants/cartConstants'
 import {
   PRODUCT_DETAILS_FAIL,
   PRODUCT_DETAILS_REQUEST,
@@ -7,6 +11,15 @@ import {
   PRODUCT_LIST_REQUEST,
   PRODUCT_LIST_SUCCESS,
 } from '../constants/productConstants'
+import {
+  USER_REGISTER_FAIL,
+  USER_REGISTER_REQUEST,
+  USER_REGISTER_SUCCESS,
+  USER_SIGNIN_FAIL,
+  USER_SIGNIN_REQUEST,
+  USER_SIGNIN_SUCCESS,
+  USER_SIGNOUT,
+} from '../constants/userConstants'
 
 export const initialState = {
   products: [],
@@ -14,8 +27,14 @@ export const initialState = {
   cartItems: localStorage.getItem('cartItems')
     ? JSON.parse(localStorage.getItem('cartItems'))
     : [],
-  loading: true,
+  shippingAddress: localStorage.getItem('shippingAddress')
+    ? JSON.parse(localStorage.getItem('shippingAddress'))
+    : {},
+  loading: false,
   error: null,
+  userInfo: localStorage.getItem('userInfo')
+    ? JSON.parse(localStorage.getItem('userInfo'))
+    : null,
 }
 export const productListReducer = (initialState, action) => {
   //console.log(initialState, action)
@@ -53,6 +72,54 @@ export const productListReducer = (initialState, action) => {
         cartItems: initialState.cartItems.filter(
           (x) => x.product !== action.payload
         ),
+      }
+    case CART_SAVE_SHIPPING_ADDRESS:
+      return {
+        ...initialState,
+        shippingAddress: action.payload,
+      }
+    case USER_SIGNIN_REQUEST:
+      return {
+        ...initialState,
+        loading: true,
+      }
+    case USER_SIGNIN_SUCCESS:
+      return {
+        ...initialState,
+        loading: false,
+        userInfo: action.payload,
+        error: null,
+      }
+    case USER_SIGNIN_FAIL:
+      return {
+        ...initialState,
+        loading: false,
+        error: action.payload,
+      }
+    case USER_SIGNOUT:
+      return {
+        ...initialState,
+        userInfo: null,
+        error: null,
+      }
+
+    case USER_REGISTER_REQUEST:
+      return {
+        ...initialState,
+        loading: true,
+      }
+    case USER_REGISTER_SUCCESS:
+      return {
+        ...initialState,
+        loading: false,
+        userInfo: action.payload,
+        error: null,
+      }
+    case USER_REGISTER_FAIL:
+      return {
+        ...initialState,
+        loading: false,
+        error: action.payload,
       }
 
     default:
